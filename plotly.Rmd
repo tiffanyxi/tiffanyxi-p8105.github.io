@@ -27,7 +27,7 @@ nyc_airbnb =
   sample_n(5000)
 ```
 
-Plotly scatterplot
+#Plotly scatterplot
 
 ```{r}
 nyc_airbnb %>%
@@ -36,5 +36,66 @@ nyc_airbnb %>%
           alpha = 0.5, 
           color = ~price,
           text = ~text_label)
+```
+
+#Plotly boxplot
+
+```{r}
+nyc_airbnb %>% 
+  plot_ly(y = ~price, color = ~neighbourhood, type = "box",
+          colors = "Set2")
+```
+
+```{r}
+common_neighborhoods =
+  nyc_airbnb %>% 
+  count(neighbourhood, sort = TRUE) %>% 
+  top_n(8) %>% 
+  select(neighbourhood)
+## Selecting by n
+
+inner_join(nyc_airbnb, common_neighborhoods,
+             by = "neighbourhood") %>% 
+  mutate(neighbourhood = fct_reorder(neighbourhood, price)) %>% 
+  plot_ly(y = ~price, color = ~neighbourhood, type = "box",
+          colors = "Set2")
+```
+
+#Plotly barchart
+
+```{r}
+nyc_airbnb %>% 
+  count(neighbourhood) %>% 
+  mutate(neighbourhood = fct_reorder(neighbourhood, n)) %>% 
+  plot_ly(x = ~neighbourhood, y = ~n, color = ~neighbourhood, type = "bar")
+```
+
+#ggplotly-scatterplot 
+
+```{r}
+scatter_ggplot = 
+  nyc_airbnb %>%
+  ggplot(aes(x = longitude, y = latitude, color = price)) +
+  geom_point(alpha = 0.25) +
+  scale_color_viridis() +
+  coord_cartesian() +
+  theme_classic()
+
+ggplotly(scatter_ggplot)
+```
+
+#ggplotly-boxplot 
+
+```{r}
+box_ggplot = 
+  inner_join(nyc_airbnb, common_neighborhoods,
+             by = "neighbourhood") %>% 
+  mutate(neighbourhood = fct_reorder(neighbourhood, price)) %>% 
+  ggplot(aes(x = neighbourhood, y = price, fill = neighbourhood)) +
+  geom_boxplot() +
+  theme_classic() + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+ggplotly(box_ggplot)
 ```
 
