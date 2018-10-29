@@ -1,0 +1,13 @@
+---
+title: "code"
+---
+
+This page shows some example code.
+
+```{r}
+library(tidyverse)
+tibble(
+  x = 1:10,
+  y = x + 2
+)
+```
