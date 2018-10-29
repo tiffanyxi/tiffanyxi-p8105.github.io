@@ -2,6 +2,9 @@
 title: "plotly"
 ---
 
+This page shows some example plotly plots.
+
+
 ```{r}
 library(tidyverse)
 library(viridis)
@@ -10,6 +13,7 @@ library(p8105.datasets)
 library(plotly)
 ```
 
+Get the data I care about.
 
 ```{r}
 set.seed(1)
@@ -27,7 +31,7 @@ nyc_airbnb =
   sample_n(5000)
 ```
 
-#Plotly scatterplot
+### Plotly scatterplot
 
 ```{r}
 nyc_airbnb %>%
@@ -38,7 +42,7 @@ nyc_airbnb %>%
           text = ~text_label)
 ```
 
-#Plotly boxplot
+### Plotly boxplot
 
 ```{r}
 nyc_airbnb %>% 
@@ -46,13 +50,21 @@ nyc_airbnb %>%
           colors = "Set2")
 ```
 
+
+```{r}
+nyc_airbnb %>% 
+  plot_ly(y = ~price, color = ~neighbourhood, type = "violin",
+          colors = "Set2")
+```
+
+### Plotly boxplot
+
 ```{r}
 common_neighborhoods =
   nyc_airbnb %>% 
   count(neighbourhood, sort = TRUE) %>% 
   top_n(8) %>% 
   select(neighbourhood)
-## Selecting by n
 
 inner_join(nyc_airbnb, common_neighborhoods,
              by = "neighbourhood") %>% 
@@ -61,7 +73,7 @@ inner_join(nyc_airbnb, common_neighborhoods,
           colors = "Set2")
 ```
 
-#Plotly barchart
+### Plotly bar plots
 
 ```{r}
 nyc_airbnb %>% 
